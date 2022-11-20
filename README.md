@@ -5,13 +5,13 @@
 No diretório do projeto, executar:
 
 ##### Quicksort recursivo / nao recursivo / empilha inteligente
-`./bin/run.out quicksort -v [variacao] -s [semente] ./arquivo_entrada.txt -o ./arquivo_saida`
+`./bin/run.out quicksort -v [variacao] -s [semente] -i ./arquivo_entrada.txt -o ./arquivo_saida`
 
 ##### Quicksort Mediana
-`./bin/run.out quicksort -v [variacao] -k [K elementos] -s [semente] ./arquivo_entrada.txt -o ./arquivo_saida`
+`./bin/run.out quicksort -v [variacao] -k [K elementos] -s [semente] -i ./arquivo_entrada.txt -o ./arquivo_saida`
 
 ##### Quicksort Selecao
-`./bin/run.out quicksort -v [variacao] -m [tamanho] -s [semente] ./arquivo_entrada.txt -o ./arquivo_saida`
+`./bin/run.out quicksort -v [variacao] -m [tamanho] -s [semente] -i ./arquivo_entrada.txt -o ./arquivo_saida`
 
 No qual:
 
@@ -34,4 +34,4 @@ No qual:
 
 #### Exemplo de uso:
 
-TBD
+`./bin/run.out quicksort -v 1 -s 10 -i ./samples/teste.txt -o ./arquivo_saida`
