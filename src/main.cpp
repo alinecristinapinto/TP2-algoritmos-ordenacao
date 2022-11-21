@@ -18,6 +18,7 @@
 #include "quicksort.hpp"
 #include "quicksortMediana.hpp"
 #include "quicksortSelecao.hpp"
+#include "quicksortNaoRecusivo.hpp"
 
 using namespace std;
 
@@ -30,7 +31,7 @@ void imprimir(Registro registros[], int tamanho){
 
 void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
     Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
-    // imprimir(registros,  tamanho);
+    imprimir(registros,  tamanho);
     
     switch(vQuicksort) {
         case QUICKSORT_RECURSIVO: {
@@ -58,6 +59,10 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
         } break;
         case QUICKSORT_NAO_RECURSIVO: {
             cout << "Quicksort nao recursivo" << endl;
+            QuickSortNaoRecursivo::ordenarCrescente(registros, tamanho);
+
+            cout << endl << "ORDENADO" << endl;
+            imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_EMPILHA_INTELIGENTE: {
             cout << "Quicksort empilha inteligente" << endl;

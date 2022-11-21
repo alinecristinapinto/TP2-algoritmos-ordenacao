@@ -14,8 +14,7 @@ void Pilha::empilhar(int inicio, int fim){
 }
 
 Intervalo Pilha::desempilhar(){
-    if(this->vazia())
-        return;
+    erroAssert(!this->vazia(), "Pilha vazia");
     
     No* no = this->topo;
     Intervalo indices = topo->indices;

@@ -2,6 +2,7 @@
 #define PILHA_H
 
 #include <iostream>
+#include "msgassert.hpp"
 
 using namespace std;
 
