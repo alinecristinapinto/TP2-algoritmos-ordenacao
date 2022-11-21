@@ -16,7 +16,7 @@ public:
      * @brief Ordena o vetor de forma crescente com quicksort recursivo
      * 
      * @param registros Vetor de registros
-     * @param tamanho Teamanho do vetor
+     * @param tamanho Tamanho do vetor
     */
     static void ordenarCrescente(Registro registros[], int tamanho);
 
@@ -28,7 +28,7 @@ private:
      * @param indiceInicial Indice inicial do vetor
      * @param indiceFinal Indice final do vetor
      * @param incdiceEsqueda Ponteiro para indice que percorrera o vetor a esquerda
-     * @param indicedireita Ponteiro para indice que percorrera o vetor a direita
+     * @param indiceDireita Ponteiro para indice que percorrera o vetor a direita
     */
     static void particionar(Registro registros[], int indiceInicial, int indiceFinal, int *indiceEsquerda, int *indiceDireita);
     

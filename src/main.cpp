@@ -11,9 +11,11 @@
 #include "constantes.hpp"
 #include "geradorDados.hpp"
 #include "leitorLinhaComando.hpp"
+#include "msgassert.hpp"
+
 #include "registro.hpp"
 #include "quicksort.hpp"
-#include "msgassert.hpp" 
+#include "quicksortMediana.hpp"
 
 using namespace std;
 
@@ -25,20 +27,24 @@ void imprimir(Registro registros[], int tamanho){
 }
 
 void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
+    Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
+
     switch(vQuicksort) {
         case QUICKSORT_RECURSIVO: {
-            cout << "Quicksort recursivo" << endl;
-            Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
-            imprimir(registros,  tamanho);
-
+            // cout << "Quicksort recursivo" << endl;
+            // imprimir(registros,  tamanho);
             QuickSort::ordenarCrescente(registros, tamanho);
-
-            cout << endl << "ORDENADO" << endl;
-            imprimir(registros,  tamanho);
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_MEDIANA: {
             int k = LeitorLinhaComando::buscar_k_elementos_quicksort_mediana(argc, argv);
-            cout << "Quicksort mediana, k " << k << endl;
+            //cout << "Quicksort mediana, k " << k << endl;
+            // imprimir(registros,  tamanho);
+            // TODO
+            QuickSortMediana::ordenarCrescente(registros, tamanho, k);
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_SELECAO: {
             int m = LeitorLinhaComando::buscar_m_tamanho_quicksort_selecao(argc, argv);
