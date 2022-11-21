@@ -35,3 +35,5 @@ No qual:
 #### Exemplo de uso:
 
 `./bin/run.out quicksort -v 1 -s 10 -i ./samples/teste.txt -o ./arquivo_saida`
+`./bin/run.out quicksort -v 2 -k 3 -s 10 -i ./samples/teste.txt -o ./arquivo_saida`
+`./bin/run.out quicksort -v 3 -m 10 -s 10 -i ./samples/teste.txt -o ./arquivo_saida`

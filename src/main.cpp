@@ -30,22 +30,31 @@ void imprimir(Registro registros[], int tamanho){
 
 void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
     Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
-    imprimir(registros,  tamanho);
+    // imprimir(registros,  tamanho);
     
     switch(vQuicksort) {
         case QUICKSORT_RECURSIVO: {
             cout << "Quicksort recursivo" << endl;        
             QuickSort::ordenarCrescente(registros, tamanho);
+
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_MEDIANA: {
             int k = LeitorLinhaComando::buscar_k_elementos_quicksort_mediana(argc, argv);
             cout << "Quicksort mediana, k " << k << endl;
             QuickSortMediana::ordenarCrescente(registros, tamanho, k);
+
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_SELECAO: {
             int m = LeitorLinhaComando::buscar_m_tamanho_quicksort_selecao(argc, argv);
             cout << "Quicksort selecao, m " << m << endl;
             QuickSortSelecao::ordenarCrescente(registros, tamanho, m);
+
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_NAO_RECURSIVO: {
             cout << "Quicksort nao recursivo" << endl;
@@ -56,9 +65,6 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
         default: {
             erroAssert(false, "Variacao de algoritmo quicksort nao conhecido");
         }
-
-        cout << endl << "ORDENADO" << endl;
-        imprimir(registros,  tamanho);
     } 
 }
 
