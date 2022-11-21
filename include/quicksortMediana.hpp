@@ -2,7 +2,10 @@
 #define QUICKSORTMEDIANA_H
 
 #include <iostream>
+#include <cmath>
 #include "registro.hpp"
+#include "selecao.h"
+#include "geradorDados.hpp"
 
 using namespace std;
 

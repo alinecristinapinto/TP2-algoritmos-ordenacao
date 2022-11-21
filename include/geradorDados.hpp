@@ -13,6 +13,14 @@ using namespace std;
 class GeradorDados {
 public:
     /**
+     * @brief  Retorna um numero inteiro aleatorio dado um intervalo
+     * 
+     * @param minimo Valor minimo do intervalo
+     * @param maximo Valor maximo do intervalo
+     * @return Numero aleatorio
+    */
+    static int gerarInteiroAleatorioEmIntervalo(int minimo, int maximo);
+    /**
      * @brief  Retorna um vetor de registros com inteiros aleatorios
      * 
      * @param tamanho Tamanho do vetor
@@ -20,6 +28,5 @@ public:
     */
     static Registro* gerarVetorRegistrosAleatorios(int tamanho);
 };
-
 
 #endif

@@ -1,7 +1,22 @@
 #include "quicksortMediana.hpp"
 
 Registro QuickSortMediana::buscarPivo(Registro registros[], int indiceInicial, int indiceFinal, int k){
+    if(k >= (indiceFinal - indiceInicial + 1)) return registros[indiceInicial];
+
+    Registro* medianas = new Registro[k];
+
+    for(int i=0; i < k; i++){
+        int indiceAleatorio = GeradorDados::gerarInteiroAleatorioEmIntervalo(indiceInicial, indiceFinal);
+        medianas[i] = registros[indiceAleatorio];
+    } 
+
+    Selecao::ordenarCrescente(medianas, 0, k - 1);
     
+    int indiceMediana = std::floor(k / 2.0); 
+    Registro pivo = medianas[indiceMediana];
+
+    delete [] medianas;
+    return pivo;
 }
 
 void QuickSortMediana::particionar(Registro registros[], int indiceInicial, int indiceFinal, int k, int *indiceEsquerda, int *indiceDireita){
