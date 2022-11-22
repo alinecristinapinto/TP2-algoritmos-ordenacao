@@ -19,6 +19,7 @@
 #include "quicksortMediana.hpp"
 #include "quicksortSelecao.hpp"
 #include "quicksortNaoRecusivo.hpp"
+#include "quicksortEmpilhaInteligente.hpp"
 
 using namespace std;
 
@@ -61,11 +62,15 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
             cout << "Quicksort nao recursivo" << endl;
             QuickSortNaoRecursivo::ordenarCrescente(registros, tamanho);
 
-            cout << endl << "ORDENADO" << endl;
-            imprimir(registros,  tamanho);
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_EMPILHA_INTELIGENTE: {
             cout << "Quicksort empilha inteligente" << endl;
+            QuickSortEmpilhaInteligente::ordenarCrescente(registros, tamanho);
+
+            cout << endl << "ORDENADO" << endl;
+            imprimir(registros,  tamanho);
         } break;
         default: {
             erroAssert(false, "Variacao de algoritmo quicksort nao conhecido");
