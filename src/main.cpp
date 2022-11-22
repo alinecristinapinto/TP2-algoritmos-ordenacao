@@ -56,7 +56,7 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *
         case QUICKSORT_SELECAO: {
             int m = LeitorLinhaComando::buscar_m_tamanho_quicksort_selecao(argc, argv);
             cout << "Quicksort selecao, m " << m << endl;
-            QuickSortSelecao::ordenarCrescente(registros, tamanho, m);
+            QuickSortSelecao::ordenarCrescente(registros, tamanho, m, desempenho);
 
             // cout << endl << "ORDENADO" << endl;
             // imprimir(registros,  tamanho);
@@ -72,8 +72,8 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *
             cout << "Quicksort empilha inteligente" << endl;
             QuickSortEmpilhaInteligente::ordenarCrescente(registros, tamanho);
 
-            cout << endl << "ORDENADO" << endl;
-            imprimir(registros,  tamanho);
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         default: {
             erroAssert(false, "Variacao de algoritmo quicksort nao conhecido");
