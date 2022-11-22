@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
         imprimir(registros,  tamanho);
         Desempenho *desempenho = new Desempenho{0, 0};
 
-        HeapSort::ordenarCrescente(registros, tamanhos[i]);
+        HeapSort::ordenarCrescente(registros, tamanhos[i], desempenho);
 
         cout << "Metricas" << endl;
         cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
