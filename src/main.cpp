@@ -34,29 +34,30 @@ void imprimir(Registro registros[], int tamanho){
     }
 }
 
-void direcionarQuicksort(Registro *registros, int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *desempenho){
+void direcionar(Registro *registros, int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *desempenho){
     switch(vQuicksort) {
         case QUICKSORT_RECURSIVO: {
-            cout << "Quicksort recursivo" << endl;        
             QuickSort::ordenarCrescente(registros, tamanho, desempenho);
         } break;
         case QUICKSORT_MEDIANA: {
             int k = LeitorLinhaComando::buscar_k_elementos_quicksort_mediana(argc, argv);
-            cout << "Quicksort mediana, k " << k << endl;
             QuickSortMediana::ordenarCrescente(registros, tamanho, k, desempenho);
         } break;
         case QUICKSORT_SELECAO: {
             int m = LeitorLinhaComando::buscar_m_tamanho_quicksort_selecao(argc, argv);
-            cout << "Quicksort selecao, m " << m << endl;
             QuickSortSelecao::ordenarCrescente(registros, tamanho, m, desempenho);
         } break;
         case QUICKSORT_NAO_RECURSIVO: {
-            cout << "Quicksort nao recursivo" << endl;
             QuickSortNaoRecursivo::ordenarCrescente(registros, tamanho, desempenho);
         } break;
         case QUICKSORT_EMPILHA_INTELIGENTE: {
-            cout << "Quicksort empilha inteligente" << endl;
             QuickSortEmpilhaInteligente::ordenarCrescente(registros, tamanho, desempenho);
+        } break;
+        case ALGORITMO_MERGESORT: {
+            MergeSort::ordenarCrescente(registros, tamanho, desempenho);    
+        } break;
+        case ALGORITMO_HEAPSORT: {
+            HeapSort::ordenarCrescente(registros, tamanho, desempenho);
         } break;
         default: {
             erroAssert(false, "Variacao de algoritmo quicksort nao conhecido");
@@ -64,8 +65,7 @@ void direcionarQuicksort(Registro *registros, int vQuicksort, int tamanho, int a
     } 
 }
 
-void escreverCabecalho(ofstream& arquivo, string algoritmo){
-    arquivo << "Algoritmo " << algoritmo << endl;
+void escreverCabecalho(ofstream& arquivo){
     arquivo << "Tamanho Atribuicoes Comparacoes Tempo" << endl;
 }
 
@@ -73,7 +73,7 @@ void escreverMetricas(ofstream& arquivo, int tamanho, int atribuicoes, int compa
     arquivo << tamanho << " " << atribuicoes << " " << comparacoes << " " << tempo << endl;
 }
 
-void processarQuicksort(int vQuicksort, int nEntradas, int *tamanhos, int algoritmo, int argc, char* argv[], ofstream& arquivo){
+void processar(int vQuicksort, int nEntradas, int *tamanhos, int argc, char* argv[], ofstream& arquivo){
     struct rusage resources;
     int statusGetResources;
 
@@ -96,13 +96,7 @@ void processarQuicksort(int vQuicksort, int nEntradas, int *tamanhos, int algori
         imprimir(registros,  tamanhos[i]);
         Desempenho *desempenho = new Desempenho{0, 0};
 
-        if(algoritmo == ALGORITMO_QUICKSORT){
-            direcionarQuicksort(registros, vQuicksort, tamanhos[i], argc, argv, desempenho);
-        } else if (algoritmo == ALGORITMO_MERGESORT){
-            MergeSort::ordenarCrescente(registros, tamanhos[i], desempenho);
-        } else {
-            HeapSort::ordenarCrescente(registros, tamanhos[i], desempenho);
-        }
+        direcionar(registros, vQuicksort, tamanhos[i], argc, argv, desempenho);
 
         cout << "Metricas" << endl;
         cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
@@ -145,17 +139,8 @@ int main(int argc, char* argv[]) {
     ofstream resultados(arquivoSaida);
     erroAssert(resultados.is_open(), "Nao foi possivel criar o arquivo de saida");
    
-    // PARTE 1 - QUICKSORT
-    escreverCabecalho(resultados, "QuickSort");
-    processarQuicksort(vQuicksort, nEntradas, tamanhos, ALGORITMO_QUICKSORT, argc, argv, resultados);
-  
-    // PARTE 2 MERGESORT E HEAPSORT
-    resultados << endl;
-    escreverCabecalho(resultados, "MergeSort");
-    processarQuicksort(vQuicksort, nEntradas, tamanhos, ALGORITMO_MERGESORT, argc, argv, resultados);
-    resultados << endl;
-    escreverCabecalho(resultados, "HeapSort");
-    processarQuicksort(vQuicksort, nEntradas, tamanhos, ALGORITMO_HEAPSORT, argc, argv, resultados);
+    escreverCabecalho(resultados);
+    processar(vQuicksort, nEntradas, tamanhos, argc, argv, resultados);
   
     resultados.close();
     return 0;

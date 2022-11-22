@@ -36,7 +36,7 @@ void QuickSortSelecao::ordenar(Registro registros[], int indiceInicial, int indi
     int indiceEsquerda, indiceDireita;
 
     if( (indiceFinal - indiceInicial + 1) <= m){
-        Selecao::ordenarCrescente(registros, indiceInicial, indiceFinal);
+        Selecao::ordenarCrescente(registros, indiceInicial, indiceFinal, desempenho);
         return;
     } 
 

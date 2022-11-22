@@ -10,7 +10,7 @@ Registro QuickSortMediana::buscarPivo(Registro registros[], int indiceInicial, i
         medianas[i] = registros[indiceAleatorio];
     } 
 
-    Selecao::ordenarCrescente(medianas, 0, k - 1);
+    Selecao::ordenarCrescente(medianas, 0, k - 1, desempenho);
     
     int indiceMediana = std::floor(k / 2.0); 
     Registro pivo = medianas[indiceMediana];
