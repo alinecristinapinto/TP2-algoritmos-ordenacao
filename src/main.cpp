@@ -33,9 +33,8 @@ void imprimir(Registro registros[], int tamanho){
     }
 }
 
-void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
+void processar(int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *desempenho){
     Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
-    Desempenho *desempenho = new Desempenho{0, 0};
     imprimir(registros,  tamanho);
     
     switch(vQuicksort) {
@@ -43,16 +42,13 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
             cout << "Quicksort recursivo" << endl;        
             QuickSort::ordenarCrescente(registros, tamanho, desempenho);
 
-            cout << endl << "ORDENADO" << endl;
-            imprimir(registros,  tamanho);
-            cout << "Metricas" << endl;
-            cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
-            cout << "Comparacoes " << (*desempenho).numeroComparacoes << endl;
+            // cout << endl << "ORDENADO" << endl;
+            // imprimir(registros,  tamanho);
         } break;
         case QUICKSORT_MEDIANA: {
             int k = LeitorLinhaComando::buscar_k_elementos_quicksort_mediana(argc, argv);
             cout << "Quicksort mediana, k " << k << endl;
-            QuickSortMediana::ordenarCrescente(registros, tamanho, k);
+            QuickSortMediana::ordenarCrescente(registros, tamanho, k, desempenho);
 
             // cout << endl << "ORDENADO" << endl;
             // imprimir(registros,  tamanho);
@@ -100,8 +96,15 @@ int main(int argc, char* argv[]) {
 
     for(int i=0; i<nEntradas; i++){
         arquivo >> tamanho;
+        Desempenho *desempenho = new Desempenho{0, 0};
 
-        processar(vQuicksort, tamanho, argc, argv);
+        processar(vQuicksort, tamanho, argc, argv, desempenho);
+
+        cout << "Metricas" << endl;
+        cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
+        cout << "Comparacoes " << (*desempenho).numeroComparacoes << endl;
+
+        delete desempenho;
     }
 
     arquivo.close();
