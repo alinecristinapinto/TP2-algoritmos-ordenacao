@@ -20,6 +20,7 @@
 #include "quicksortSelecao.hpp"
 #include "quicksortNaoRecusivo.hpp"
 #include "quicksortEmpilhaInteligente.hpp"
+#include "mergesort.hpp"
 
 using namespace std;
 
@@ -79,25 +80,34 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[]){
 }
 
 int main(int argc, char* argv[]) {
-    int vQuicksort = LeitorLinhaComando::buscar_variacao_quicksort(argc, argv);
-    int semente = LeitorLinhaComando::buscar_semente_gerador_numero(argc, argv);
-    string arquivoEntrada = LeitorLinhaComando::buscar_nome_arquivo_entrada(argc, argv);
+    // int vQuicksort = LeitorLinhaComando::buscar_variacao_quicksort(argc, argv);
+    // int semente = LeitorLinhaComando::buscar_semente_gerador_numero(argc, argv);
+    // string arquivoEntrada = LeitorLinhaComando::buscar_nome_arquivo_entrada(argc, argv);
     // string arquivoSaida = LeitorLinhaComando::buscar_nome_arquivo_saida(argc, argv);
 
-    ifstream arquivo(arquivoEntrada);
-    erroAssert(arquivo.is_open(), "Nao foi possivel ler o arquivo de entrada");
+    // ifstream arquivo(arquivoEntrada);
+    // erroAssert(arquivo.is_open(), "Nao foi possivel ler o arquivo de entrada");
 
-    srand(semente);
-    int nEntradas = 0, tamanho = 0;
-    arquivo >> nEntradas;
+    // srand(semente);
+    // int nEntradas = 0, tamanho = 0;
+    // arquivo >> nEntradas;
 
-    for(int i=0; i<nEntradas; i++){
-        arquivo >> tamanho;
+    // for(int i=0; i<nEntradas; i++){
+    //     arquivo >> tamanho;
 
-        processar(vQuicksort, tamanho, argc, argv);
-    }
+    //     processar(vQuicksort, tamanho, argc, argv);
+    // }
 
-    arquivo.close();
+    // arquivo.close();
+
+    // srand(10);
+    // Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(10);
+    // imprimir(registros, 10);
+
+    // QuickSort::ordenarCrescente(registros, 10);
+
+    // cout << endl << "ORDENADO" << endl;
+    // imprimir(registros,  10);
 
    return 0;
 }
