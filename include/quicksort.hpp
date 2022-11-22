@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "registro.hpp"
+#include "desempenho.hpp"
 
 using namespace std;
 
@@ -17,8 +18,9 @@ public:
      * 
      * @param registros Vetor de registros
      * @param tamanho Tamanho do vetor
+     * @param desempenho Struct que armazena dados de desempenho do codigo
     */
-    static void ordenarCrescente(Registro registros[], int tamanho);
+    static void ordenarCrescente(Registro registros[], int tamanho, Desempenho *desempenho);
 
 private:
     /**
@@ -29,8 +31,9 @@ private:
      * @param indiceFinal Indice final do vetor
      * @param incdiceEsqueda Ponteiro para indice que percorrera o vetor a esquerda
      * @param indiceDireita Ponteiro para indice que percorrera o vetor a direita
+     * @param desempenho Struct que armazena dados de desempenho do codigo
     */
-    static void particionar(Registro registros[], int indiceInicial, int indiceFinal, int *indiceEsquerda, int *indiceDireita);
+    static void particionar(Registro registros[], int indiceInicial, int indiceFinal, int *indiceEsquerda, int *indiceDireita, Desempenho *desempenho);
     
     /**
      * @brief Ordena vetor de forma recursiva
@@ -38,8 +41,9 @@ private:
      * @param registros Vetor de registros
      * @param indiceInicial Indice inicial do vetor
      * @param indiceFinal Indice final do vetor
+     * @param desempenho Struct que armazena dados de desempenho do codigo
     */
-    static void ordenar(Registro registros[], int indiceInicial, int indiceFinal);
+    static void ordenar(Registro registros[], int indiceInicial, int indiceFinal, Desempenho *desempenho);
 };
 
 #endif
