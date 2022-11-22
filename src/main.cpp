@@ -33,9 +33,8 @@ void imprimir(Registro registros[], int tamanho){
     }
 }
 
-void processar(int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *desempenho){
-    Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
-    imprimir(registros,  tamanho);
+void direcionarQuicksort(Registro *registros, int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *desempenho){
+
     
     switch(vQuicksort) {
         case QUICKSORT_RECURSIVO: {
@@ -92,32 +91,64 @@ int main(int argc, char* argv[]) {
 
     srand(semente);
     int nEntradas = 0, tamanho = 0;
-    arquivo >> nEntradas;
+    int *tamanhos = new int[nEntradas];
 
+    arquivo >> nEntradas;
     for(int i=0; i<nEntradas; i++){
         arquivo >> tamanho;
+        tamanhos[i] = tamanho;
+    }
+
+    arquivo.close();
+
+    // PARTE 1 - QUICKSORT
+
+    for(int i=0; i<nEntradas; i++){
+        Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
+        imprimir(registros,  tamanho);
         Desempenho *desempenho = new Desempenho{0, 0};
 
-        processar(vQuicksort, tamanho, argc, argv, desempenho);
+        direcionarQuicksort(registros, vQuicksort, tamanhos[i], argc, argv, desempenho);
 
         cout << "Metricas" << endl;
         cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
         cout << "Comparacoes " << (*desempenho).numeroComparacoes << endl;
 
+        delete [] registros;
+        delete desempenho;
+    }
+  
+    // PARTE 2 MERGESORT E HEAPSORT
+
+    for(int i=0; i<nEntradas; i++){
+        Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
+        imprimir(registros,  tamanho);
+        Desempenho *desempenho = new Desempenho{0, 0};
+
+        MergeSort::ordenarCrescente(registros, tamanho, desempenho);
+
+        cout << "Metricas" << endl;
+        cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
+        cout << "Comparacoes " << (*desempenho).numeroComparacoes << endl;
+
+        delete [] registros;
         delete desempenho;
     }
 
-    arquivo.close();
+    for(int i=0; i<nEntradas; i++){
+        Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
+        imprimir(registros,  tamanho);
+        Desempenho *desempenho = new Desempenho{0, 0};
 
-    // srand(10);
-    // Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(10);
-    // imprimir(registros, 10);
+        HeapSort::ordenarCrescente(registros, tamanhos[i]);
 
-    // // QuickSort::ordenarCrescente(registros, 10);
-    // HeapSort::ordenarCrescente(registros, 10);
+        cout << "Metricas" << endl;
+        cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
+        cout << "Comparacoes " << (*desempenho).numeroComparacoes << endl;
 
-    // cout << endl << "ORDENADO" << endl;
-    // imprimir(registros,  10);
+        delete [] registros;
+        delete desempenho;
+    }
 
    return 0;
 }
