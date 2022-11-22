@@ -63,7 +63,7 @@ void processar(int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *
         } break;
         case QUICKSORT_NAO_RECURSIVO: {
             cout << "Quicksort nao recursivo" << endl;
-            QuickSortNaoRecursivo::ordenarCrescente(registros, tamanho);
+            QuickSortNaoRecursivo::ordenarCrescente(registros, tamanho, desempenho);
 
             // cout << endl << "ORDENADO" << endl;
             // imprimir(registros,  tamanho);
