@@ -21,6 +21,7 @@
 #include "quicksortNaoRecusivo.hpp"
 #include "quicksortEmpilhaInteligente.hpp"
 #include "mergesort.hpp"
+#include "heapsort.hpp"
 
 using namespace std;
 
@@ -100,14 +101,15 @@ int main(int argc, char* argv[]) {
 
     // arquivo.close();
 
-    // srand(10);
-    // Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(10);
-    // imprimir(registros, 10);
+    srand(10);
+    Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(10);
+    imprimir(registros, 10);
 
     // QuickSort::ordenarCrescente(registros, 10);
+    HeapSort::ordenarCrescente(registros, 10);
 
-    // cout << endl << "ORDENADO" << endl;
-    // imprimir(registros,  10);
+    cout << endl << "ORDENADO" << endl;
+    imprimir(registros,  10);
 
    return 0;
 }
