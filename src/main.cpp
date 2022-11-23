@@ -27,13 +27,6 @@
 
 using namespace std;
 
-// debug
-void imprimir(Registro registros[], int tamanho){
-    for(int i=0; i<tamanho; i++){
-        cout << registros[i].chave << endl;
-    }
-}
-
 void direcionar(Registro *registros, int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *desempenho){
     switch(vQuicksort) {
         case QUICKSORT_RECURSIVO: {
@@ -73,49 +66,11 @@ void escreverMetricas(ofstream& arquivo, int tamanho, int atribuicoes, int compa
     arquivo << tamanho << " " << atribuicoes << " " << comparacoes << " " << tempo << endl;
 }
 
-void processar(int vQuicksort, int nEntradas, int *tamanhos, int argc, char* argv[], ofstream& arquivo){
+int main(int argc, char* argv[]) {
     struct rusage resources;
     int statusGetResources;
+    double tempoAnterior = 0.0, tempoAtual = 0.0, tempoUsuario = 0.0, tempoSistema = 0.0, tempoReal = 0.0;
 
-    double tempoTotalAnterior = 0.0;
-    double tempoTotalAtual = 0.0;
-    double tempoUsuario = 0.0;
-    double tempoSistema = 0.0;
-    double intervaloExecucao = 0.0;
-
-    if((statusGetResources = getrusage(RUSAGE_SELF, &resources)) != 0) {
-        cout << "Nao foi possivel iniciar getrusage()" << endl;
-    }
-
-    tempoUsuario = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
-    tempoSistema = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
-    tempoTotalAnterior = tempoUsuario + tempoSistema;
-
-    for(int i=0; i<nEntradas; i++){
-        Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanhos[i]);
-        imprimir(registros,  tamanhos[i]);
-        Desempenho *desempenho = new Desempenho{0, 0};
-
-        direcionar(registros, vQuicksort, tamanhos[i], argc, argv, desempenho);
-
-        cout << "Metricas" << endl;
-        cout << "Atribuicoes " << (*desempenho).numeroAtribuicoes << endl;
-        cout << "Comparacoes " << (*desempenho).numeroComparacoes << endl;
-
-        tempoUsuario = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
-        tempoSistema = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
-
-        tempoTotalAtual = tempoUsuario + tempoSistema;
-        intervaloExecucao = tempoTotalAtual - tempoTotalAnterior;
-        tempoTotalAnterior = tempoTotalAtual;
-
-        escreverMetricas(arquivo, tamanhos[i], desempenho->numeroAtribuicoes, desempenho->numeroComparacoes, intervaloExecucao);
-        delete [] registros;
-        delete desempenho;
-    }
-}
-
-int main(int argc, char* argv[]) {
     int vQuicksort = LeitorLinhaComando::buscar_variacao_quicksort(argc, argv);
     int semente = LeitorLinhaComando::buscar_semente_gerador_numero(argc, argv);
     string arquivoEntrada = LeitorLinhaComando::buscar_nome_arquivo_entrada(argc, argv);
@@ -138,9 +93,36 @@ int main(int argc, char* argv[]) {
 
     ofstream resultados(arquivoSaida);
     erroAssert(resultados.is_open(), "Nao foi possivel criar o arquivo de saida");
-   
     escreverCabecalho(resultados);
-    processar(vQuicksort, nEntradas, tamanhos, argc, argv, resultados);
+
+    for(int i=0; i<nEntradas; i++){
+        Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanhos[i]);
+        Desempenho *desempenho = new Desempenho{0, 0};
+
+        if((statusGetResources = getrusage(RUSAGE_SELF, &resources)) != 0) {
+            cout << "Nao foi possivel iniciar getrusage()" << endl;
+        }
+        
+        // tempoUsuario = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
+        // tempoSistema = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
+        // tempoAnterior = tempoUsuario + tempoSistema;
+
+        direcionar(registros, vQuicksort, tamanhos[i], argc, argv, desempenho);
+
+        tempoUsuario = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
+        tempoUsuario = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
+
+        tempoAtual = tempoUsuario + tempoSistema;
+        tempoReal = tempoAtual - tempoAnterior;
+        tempoAnterior = tempoAtual;
+
+        cout << tamanhos[i] << " " << tempoAtual << " - " << tempoAnterior << " = " << tempoReal << endl;
+
+        escreverMetricas(resultados, tamanhos[i], desempenho->numeroAtribuicoes, desempenho->numeroComparacoes, tempoReal);
+
+        delete [] registros;
+        delete desempenho;
+    }
   
     resultados.close();
     return 0;
