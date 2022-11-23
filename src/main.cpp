@@ -27,8 +27,8 @@
 
 using namespace std;
 
-void direcionar(Registro *registros, int vQuicksort, int tamanho, int argc, char* argv[], Desempenho *desempenho){
-    switch(vQuicksort) {
+void direcionar(Registro *registros, int tipoAlgoritmo, int tamanho, int argc, char* argv[], Desempenho *desempenho){
+    switch(tipoAlgoritmo) {
         case QUICKSORT_RECURSIVO: {
             QuickSort::ordenarCrescente(registros, tamanho, desempenho);
         } break;
@@ -66,12 +66,26 @@ void escreverMetricas(ofstream& arquivo, int tamanho, int atribuicoes, int compa
     arquivo << tamanho << " " << atribuicoes << " " << comparacoes << " " << tempo << endl;
 }
 
-int main(int argc, char* argv[]) {
+double obterTempoTotalExecucao(){
     struct rusage resources;
     int statusGetResources;
-    double tempoAnterior = 0.0, tempoAtual = 0.0, tempoUsuario = 0.0, tempoSistema = 0.0, tempoReal = 0.0;
 
-    int vQuicksort = LeitorLinhaComando::buscar_variacao_quicksort(argc, argv);
+    double tempoUsuario = 0.0, tempoSistema = 0.0;
+
+    if((statusGetResources = getrusage(RUSAGE_SELF, &resources)) != 0) {
+        cout << "Nao foi possivel iniciar getrusage()" << endl;
+    }
+
+    tempoUsuario = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
+    tempoSistema = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
+
+    return (tempoUsuario + tempoSistema);
+}
+
+int main(int argc, char* argv[]) {
+    double tempoAnterior = 0.0, tempoAtual = 0.0, tempoReal = 0.0;
+
+    int tipoAlgoritmo = LeitorLinhaComando::buscar_variacao_quicksort(argc, argv);
     int semente = LeitorLinhaComando::buscar_semente_gerador_numero(argc, argv);
     string arquivoEntrada = LeitorLinhaComando::buscar_nome_arquivo_entrada(argc, argv);
     string arquivoSaida = LeitorLinhaComando::buscar_nome_arquivo_saida(argc, argv);
@@ -81,49 +95,31 @@ int main(int argc, char* argv[]) {
 
     srand(semente);
     int nEntradas = 0, tamanho = 0;
-    int *tamanhos = new int[nEntradas];
-
     arquivo >> nEntradas;
-    for(int i=0; i<nEntradas; i++){
-        arquivo >> tamanho;
-        tamanhos[i] = tamanho;
-    }
-
-    arquivo.close();
 
     ofstream resultados(arquivoSaida);
     erroAssert(resultados.is_open(), "Nao foi possivel criar o arquivo de saida");
     escreverCabecalho(resultados);
 
     for(int i=0; i<nEntradas; i++){
-        Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanhos[i]);
+        arquivo >> tamanho;
+        Registro *registros = GeradorDados::gerarVetorRegistrosAleatorios(tamanho);
         Desempenho *desempenho = new Desempenho{0, 0};
 
-        if((statusGetResources = getrusage(RUSAGE_SELF, &resources)) != 0) {
-            cout << "Nao foi possivel iniciar getrusage()" << endl;
-        }
-        
-        // tempoUsuario = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
-        // tempoSistema = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
-        // tempoAnterior = tempoUsuario + tempoSistema;
+        tempoAnterior = obterTempoTotalExecucao();
 
-        direcionar(registros, vQuicksort, tamanhos[i], argc, argv, desempenho);
+        direcionar(registros, tipoAlgoritmo, tamanho, argc, argv, desempenho);
 
-        tempoUsuario = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
-        tempoUsuario = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
-
-        tempoAtual = tempoUsuario + tempoSistema;
+        tempoAtual = obterTempoTotalExecucao();
         tempoReal = tempoAtual - tempoAnterior;
-        tempoAnterior = tempoAtual;
 
-        cout << tamanhos[i] << " " << tempoAtual << " - " << tempoAnterior << " = " << tempoReal << endl;
-
-        escreverMetricas(resultados, tamanhos[i], desempenho->numeroAtribuicoes, desempenho->numeroComparacoes, tempoReal);
+        escreverMetricas(resultados, tamanho, desempenho->numeroAtribuicoes, desempenho->numeroComparacoes, tempoReal);
 
         delete [] registros;
         delete desempenho;
     }
   
+    arquivo.close();
     resultados.close();
     return 0;
 }
